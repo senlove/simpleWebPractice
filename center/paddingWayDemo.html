@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>padding way demo</title>
+	<style type="text/css">
+		
+		*{
+			margin: 0px;
+			padding: 0px;
+		}
+
+		/*less 方式*/
+
+/*		@wrapWidth:400px;
+		@wrapHeight:600px;
+		
+		.wrap{
+			width: @wrapWidth;
+			height: @wrapHeight;
+			margin: 0 auto;
+			background-color: @ccc;
+		}
+		
+
+		.content{
+			@contentWidth:100px;
+			@contentHeight:200px;
+			width: @contentWidth;
+			height: @contentHeight;
+			padding-left: (@wrapWidth - @contentWidth)/2;
+			padding-top: (@wrapHeight- @contentHeight)/2;
+			background-clip: content-box;
+
+			background-color: #333;
+		}*/
+	
+		.wrap{
+			width: 400px;
+			height: 600px;
+			margin: 0 auto;
+			background-color: #ccc;
+		}
+		
+
+	
+		.content{
+			width: 100px;
+			height: 200px;
+			/*calc 方式 待验证*/
+			/*padding-left: calc("(100% - 100)/2"); */
+			/*padding-top: calc("(100% - 200)/2"); */
+
+			padding-left: 150px; 
+			padding-top: 200px; 
+			background-clip: content-box;
+
+			background-color: #333;
+			
+		}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="content"></div>
+	</div>
+</body>
+</html>
