@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>pulldown menu demo</title>
+	<style type="text/css">
+		.menu{
+			text-decoration: none;
+			display: inline-block;
+			padding: 1.25em 0;
+			text-align: center;
+			width: 180px;
+			background: #75f;
+			color: #fff;
+			border-radius: 3px;
+			box-shadow: 0 .125em .25em rgba(0, 0, 0, .5); 
+		}
+
+		.menu:hover, menu:focus{
+			background-color: #5f44cc;
+		}
+
+		.vertical-menu-container{
+			display: flex;
+			margin-top: 5px;
+			flex-direction: column;
+
+		}
+		
+		.vertical-menu-container .menu{
+			margin-top: 5px;
+		}
+		
+		.first-menu{
+			position: relative;
+			display: inl
+
+		}
+
+		.second-vertical-menu{
+			display: flex;
+			flex-direction: column;
+			position: absolute;
+			left: 185px;
+
+		}
+
+		.second-vertical-menu .menu{
+			margin-top: 5px;
+		}
+
+	</style>
+</head>
+<body>
+	<div>
+		<a class="menu" href="">drop</a>
+		<a class="menu" href="">no drop</a>
+		<div class="vertical-menu-container">
+			<a class="menu" href="">about</a>
+			<div class="first-menu">
+				<a class="menu" href="">setting</a>
+				<div class="second-vertical-menu">
+					<a class="menu" href="">Text</a>
+					<a class="menu" href="">Text</a>
+					<a class="menu" href="">Text</a>
+					<a class="menu" href="">Text</a>
+				</div>
+			</div>
+			<a class="menu" href="">help</a>
+			<a class="menu" href="">more</a>
+		</div>
+	</div>
+</body>
+</html>
