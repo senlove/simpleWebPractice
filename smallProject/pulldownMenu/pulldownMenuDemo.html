@@ -3,71 +3,138 @@
 <head>
 	<title>pulldown menu demo</title>
 	<style type="text/css">
-		.menu{
-			text-decoration: none;
-			display: inline-block;
-			padding: 1.25em 0;
-			text-align: center;
-			width: 180px;
+
+		*{
+			padding: 0px;
+			margin: 0px;
+		}
+			
+		nav {
+			margin-top: 40px;
+			margin-left: 50px;
+		}
+		nav menuitem{
+			position: relative;
+			display: block;
+		}
+
+		nav menuitem > menu{
+			position: absolute;
+			pointer-events: none;
+			
+		}
+		
+		.first-menu-container{
+			display: flex;
+		}
+		
+		.first-menu-container > menuitem{
+			pointer-events: all;
+		}
+
+		
+		menuitem:hover > menu{
+			pointer-events: initial;
+		}
+
+		.horizotal-item{
+			transform: translateX(100%);
+			top: 0px;
+			right: 0px;
+		}
+
+		nav a{
+			display: block;
+			white-space: nowrap;
 			background: #75f;
 			color: #fff;
+			min-width: 190px;
+			/*width: 190px;*/
+			transition: background 0.5s, color 0.5s, transform 0.5s;
+			margin: 0px 6px 6px 0px;
+			padding: 20px 40px;
+			box-sizing: border-box;
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 			border-radius: 3px;
-			box-shadow: 0 .125em .25em rgba(0, 0, 0, .5); 
-		}
-
-		.menu:hover, menu:focus{
-			background-color: #5f44cc;
-		}
-
-		.vertical-menu-container{
-			display: flex;
-			margin-top: 5px;
-			flex-direction: column;
-
-		}
-		
-		.vertical-menu-container .menu{
-			margin-top: 5px;
-		}
-		
-		.first-menu{
+			/*不知道为什么变色需要到这个东西*/
 			position: relative;
-			display: inl
 
 		}
 
-		.second-vertical-menu{
-			display: flex;
-			flex-direction: column;
+		nav a:hover:before{
+			content: '';
+			left: 0px;
+			top: 0px;
+			background: rgba(0, 0, 0, 0.2);
+			/*为了使背景色变深*/
+			width: 100%;
+			height: 100%;
 			position: absolute;
-			left: 185px;
-
+		}
+		
+		.vertical-item:after{
+			content: '';
+			position: absolute;
+			border: 20px solid transparent;
+			border-left: 10px solid white;
+			top: 20px;
+			left: -180px;
+			transition: opacity 0.6, transform 0s, transform 0s;
+			transition: opacity 0.6, transform 0s;
 		}
 
-		.second-vertical-menu .menu{
-			margin-top: 5px;
+		.vertical-item{
+			transition: opacity 0.6s, transform 0.6s;
+			transition: transform 0.6s, opacity 0.6s;
+			transform: translateY(50%);
+			opacity: 0;
+		}
+		
+		.drop:hover .vertical-item{
+			opacity: 1;
+			transform: translateY(0%);
+		}
+
+		.horizotal-item{
+			opacity: 0;
+			transform: translateX(150%) translateY(0%);
+			transition: opacity 0.6s, transform 0.6s;
+			transition: transform 0.6s, opacity 0.6s;
+		}
+		
+		.horizotal-item-container:hover .horizotal-item{
+			opacity: 1;
+			transform: translateX(100%) translateY(0%);
 		}
 
 	</style>
 </head>
 <body>
 	<div>
-		<a class="menu" href="">drop</a>
-		<a class="menu" href="">no drop</a>
-		<div class="vertical-menu-container">
-			<a class="menu" href="">about</a>
-			<div class="first-menu">
-				<a class="menu" href="">setting</a>
-				<div class="second-vertical-menu">
-					<a class="menu" href="">Text</a>
-					<a class="menu" href="">Text</a>
-					<a class="menu" href="">Text</a>
-					<a class="menu" href="">Text</a>
-				</div>
-			</div>
-			<a class="menu" href="">help</a>
-			<a class="menu" href="">more</a>
-		</div>
+		<nav>
+			<menu class="first-menu-container">
+				<menuitem class='drop'>
+					<a href="">drop</a>
+					<menu class="vertical-item">
+						<menuitem><a href="">about</a></menuitem>
+						<menuitem class='horizotal-item-container'>
+							<a href="">setting</a>
+							<menu class='horizotal-item'>
+								<menuitem><a href="">Test</a></menuitem>
+								<menuitem><a href="">Test</a></menuitem>
+								<menuitem><a href="">Test</a></menuitem>
+								<menuitem><a href="">Test</a></menuitem>
+							</menu>
+						</menuitem>
+						<menuitem><a href="">help</a></menuitem>
+						<menuitem>
+							<a href="">more</a>
+						</menuitem>
+					</menu>
+				</menuitem>
+				<menuitem><a href="">no drop</a></menuitem>
+			</menu>
+		</nav>
 	</div>
 </body>
 </html>
