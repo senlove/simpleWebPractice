@@ -13,50 +13,33 @@
 			margin-top: 40px;
 			margin-left: 50px;
 		}
+
 		nav menuitem{
 			position: relative;
 			display: block;
 		}
 
 		nav menuitem > menu{
-			position: absolute;
-			pointer-events: none;
-			
+			position: absolute;			
 		}
 		
-		.first-menu-container{
+		.first-menu{
 			display: flex;
 		}
 		
-		.first-menu-container > menuitem{
-			pointer-events: all;
-		}
-
-		
-		menuitem:hover > menu{
-			pointer-events: initial;
-		}
-
-		.horizotal-item{
-			transform: translateX(100%);
-			top: 0px;
-			right: 0px;
-		}
-
 		nav a{
 			display: block;
+			text-decoration: none;
 			white-space: nowrap;
 			background: #75f;
 			color: #fff;
 			min-width: 190px;
-			/*width: 190px;*/
 			transition: background 0.5s, color 0.5s, transform 0.5s;
 			margin: 0px 6px 6px 0px;
 			padding: 20px 40px;
 			box-sizing: border-box;
 			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 			border-radius: 3px;
-			/*不知道为什么变色需要到这个东西*/
 			position: relative;
 
 		}
@@ -66,45 +49,77 @@
 			left: 0px;
 			top: 0px;
 			background: rgba(0, 0, 0, 0.2);
-			/*为了使背景色变深*/
 			width: 100%;
 			height: 100%;
 			position: absolute;
 		}
 		
-		.vertical-item:after{
-			content: '';
-			position: absolute;
-			border: 20px solid transparent;
-			border-left: 10px solid white;
-			top: 20px;
-			left: -180px;
-			transition: opacity 0.6, transform 0s, transform 0s;
-			transition: opacity 0.6, transform 0s;
+		.vertical-item-container menu{
+			/*目的如果标签处在透明状态，不会捕捉到鼠标悬停事件*/
+			pointer-events: none;
 		}
 
-		.vertical-item{
+		.vertical-item-container > menu{
 			transition: opacity 0.6s, transform 0.6s;
-			transition: transform 0.6s, opacity 0.6s;
-			transform: translateY(50%);
+			transform: translateY(20%);
 			opacity: 0;
+			/*改成display:none 方式，动画的效果会消失*/
+			/*display: none;*/
 		}
 		
-		.drop:hover .vertical-item{
+		.vertical-item-container:hover > menu{
 			opacity: 1;
+			/*display: block;*/
 			transform: translateY(0%);
+			pointer-events: initial;
 		}
 
-		.horizotal-item{
+		.horizotal-item-container>menu{
+			transform: translateX(100%);
+			top: 0px;
+			right: 0px;
+		}
+
+		
+		.horizotal-item-container>menu{
 			opacity: 0;
-			transform: translateX(150%) translateY(0%);
-			transition: opacity 0.6s, transform 0.6s;
-			transition: transform 0.6s, opacity 0.6s;
+			transform: translateX(120%) translateY(0%);
+			transition: opacity 0.6s, transform 0.2s;
 		}
 		
-		.horizotal-item-container:hover .horizotal-item{
+		.horizotal-item-container:hover>menu{
 			opacity: 1;
 			transform: translateX(100%) translateY(0%);
+			pointer-events: initial;
+		}
+		
+		.change-bg a{
+			/*display: block;*/
+			display: none;
+			box-sizing: border-box;
+			text-decoration: none;
+			background: #75f;
+			color: #fff;
+			width: 190px;
+			padding: 20px 40px;
+
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+			border-radius: 3px;
+
+			transition: background 0.5s, color 0.5s, transform 0.5s;
+
+			position: relative;
+		}
+		
+
+		.change-bg a:hover:before{
+			background: rgba(0, 0, 0, .2);
+			content: '';
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			position: absolute;
 		}
 
 	</style>
@@ -112,17 +127,25 @@
 <body>
 	<div>
 		<nav>
-			<menu class="first-menu-container">
-				<menuitem class='drop'>
+			<menu class="first-menu">
+				<menuitem class='vertical-item-container'>
 					<a href="">drop</a>
-					<menu class="vertical-item">
+					<menu>
 						<menuitem><a href="">about</a></menuitem>
 						<menuitem class='horizotal-item-container'>
 							<a href="">setting</a>
-							<menu class='horizotal-item'>
+							<menu>
 								<menuitem><a href="">Test</a></menuitem>
 								<menuitem><a href="">Test</a></menuitem>
-								<menuitem><a href="">Test</a></menuitem>
+								<menuitem class='horizotal-item-container'>
+									<a href="">Test</a>
+									<menu>
+										<menuitem><a href="">Test3</a></menuitem>
+										<menuitem><a href="">Test3</a></menuitem>
+										<menuitem><a href="">Test3</a></menuitem>
+										<menuitem><a href="">Test3</a></menuitem>
+									</menu>
+								</menuitem>
 								<menuitem><a href="">Test</a></menuitem>
 							</menu>
 						</menuitem>
@@ -136,5 +159,12 @@
 			</menu>
 		</nav>
 	</div>
+
+	<!-- 简单button 变色demo -->
+	<div class="change-bg">
+		<a href="">button</a>
+	</div>
+
+
 </body>
 </html>
