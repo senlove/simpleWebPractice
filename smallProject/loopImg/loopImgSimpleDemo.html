@@ -9,7 +9,7 @@
 			margin: 0px;
 			padding: 0px;
 		}
-		
+
 		body{
 			background: #ccc;
 		}
@@ -21,7 +21,7 @@
 			margin: 0 auto;
 			margin-top: 30px;
 
-			overflow: hidden;		
+			overflow: hidden;
 			position: relative;
 
 		}
@@ -29,18 +29,34 @@
 		.swiper-item{
 			width: 100%;
 			height: 100%;
-			background: #454676;
+			background-color: #454676;
 
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			
+
 			color: #fff;
 			font-size: 20px;
 
 			position: absolute;
 		}
-		
+
+		.swiper-item:first-child{
+			background-color: #144141;
+		}
+
+		.swiper-item:nth-child(2){
+			background-color: #616414;
+		}
+
+		.swiper-item:nth-child(3){
+			background-color: #992552;
+		}
+
+		/* .swiper-item:last-child{
+			background-color: #f00;
+		} */
+
 		.swiper-prev, .swiper-next{
 			position: absolute;
 			/*值强依赖*/
@@ -57,26 +73,45 @@
 		.swiper-next{
 			right: 20px;
 		}
-		
-		
-		
+
+
 	</style>
 
 	<script type="text/javascript">
-		$(function(){
+		$(function() {
 
-			var $swiperContainer = $('.swiper-container');
-			var $swiperItems = $('.swiper-item');
-			$swiperItems.css('left', '100%');
-			// $swiperItems.first().css('left', '0');
-		   
-			$($swiperItems[0])
 
-			
-			$('.swiper-prev').click(function(){
+		  var $swiperContainer = $('.swiper-container');
+		  var $swiperItems = $('.swiper-item');
+		  $swiperItems.css('left', '100%');
 
-			})
-			
+
+		  var currentItem = 0;
+		  $($swiperItems[currentItem]).css('left', '0');
+
+		  $('.swiper-prev').click(function(event) {
+		    if (currentItem <= 0) {
+		      return;
+		    }
+
+		    $($swiperItems[currentItem]).css('left', '100%');
+		    currentItem = currentItem - 1;
+		    $($swiperItems[currentItem]).css('left', '0');
+
+		  });
+		  $('.swiper-next').click(function(event) {
+
+		    if (currentItem >= ($swiperItems.length - 1)) {
+		      return;
+		    }
+
+		    $($swiperItems[currentItem]).css('left', '-100%');
+
+		    currentItem = currentItem + 1;
+
+		    $($swiperItems[currentItem]).css('left', '0');
+		  });
+
 		});
 	</script>
 </head>
