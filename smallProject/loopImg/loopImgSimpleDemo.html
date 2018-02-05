@@ -39,10 +39,12 @@
 			font-size: 20px;
 
 			position: absolute;
+			left: 100%;
 		}
 
 		.swiper-item:first-child{
 			background-color: #144141;
+			left: 0;
 		}
 
 		.swiper-item:nth-child(2){
@@ -83,33 +85,76 @@
 
 		  var $swiperContainer = $('.swiper-container');
 		  var $swiperItems = $('.swiper-item');
-		  $swiperItems.css('left', '100%');
-
 
 		  var currentItem = 0;
-		  $($swiperItems[currentItem]).css('left', '0');
+			function scrollItem(isPrev){
+				if(isPrev && currentItem <=0){//上一个
+					return;
+				}
+
+				if(!isPrev && currentItem >= ($swiperItems.length - 1)){//下一个
+					return;
+				}
+
+				var space = 100;
+				var spaceTime = 50;
+
+				var $currItem = $($swiperItems[currentItem]);
+				var currentItemLeft = $currItem.css('left');
+				var currItemLeftInt = Number.parseInt(currentItemLeft);
+				var itemWith = Number.parseInt($currItem.width());
+				var currItemLeftPos = currItemLeftInt;
+
+				currentItem = currentItem + (isPrev ? -1 : 1);
+
+				var $otherItem = $($swiperItems[currentItem]);
+				var otherItemLeft = $otherItem.css('left');
+				var otherItemLeftInt = Number.parseInt(otherItemLeft);
+				var otherItemLeftPos = otherItemLeftInt;
+
+				function scrollLeftOrRight() {
+					currItemLeftPos = currItemLeftPos + (isPrev ? space : -space);
+				  if (isPrev &&currItemLeftPos >= itemWith)  {
+				      currItemLeftPos = itemWith;
+				  }
+
+					if(!isPrev && currItemLeftPos <= -(itemWith)){
+							currItemLeftPos = -(itemWith);
+					}
+				  $currItem.css('left', currItemLeftPos);
+
+					otherItemLeftPos = otherItemLeftPos + (isPrev ? space : -space);
+
+				  if (isPrev && otherItemLeftPos >= 0) {
+				      otherItemLeftPos = 0;
+				  }
+
+				  if (!isPrev && otherItemLeftPos <= 0) {
+				      otherItemLeftPos = 0;
+				  }
+					$otherItem.css('left', otherItemLeftPos);
+
+				  if (otherItemLeftPos === 0) {
+				    return;
+				  }
+
+					setTimeout(function(){
+						scrollLeftOrRight();
+					}, spaceTime);
+				}
+
+				setTimeout(function(){
+					scrollLeftOrRight();
+				}, spaceTime);
+
+			}
 
 		  $('.swiper-prev').click(function(event) {
-		    if (currentItem <= 0) {
-		      return;
-		    }
-
-		    $($swiperItems[currentItem]).css('left', '100%');
-		    currentItem = currentItem - 1;
-		    $($swiperItems[currentItem]).css('left', '0');
-
+				scrollItem(true);
 		  });
+
 		  $('.swiper-next').click(function(event) {
-
-		    if (currentItem >= ($swiperItems.length - 1)) {
-		      return;
-		    }
-
-		    $($swiperItems[currentItem]).css('left', '-100%');
-
-		    currentItem = currentItem + 1;
-
-		    $($swiperItems[currentItem]).css('left', '0');
+				scrollItem(false);
 		  });
 
 		});
