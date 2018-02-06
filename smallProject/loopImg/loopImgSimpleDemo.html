@@ -87,13 +87,24 @@
 		  var $swiperItems = $('.swiper-item');
 
 		  var currentItem = 0;
-			function scrollItem(isPrev){
-				if(isPrev && currentItem <=0){//上一个
-					return;
-				}
+			var autoLoopTimeout = null;
+			var timeout = null;
+			var autoTimeMilli = 3000;
+			var isAutoLoop = false;
+			// var preCurrItemIndex;
+			function scrollItem(isPrev, isClick){
 
-				if(!isPrev && currentItem >= ($swiperItems.length - 1)){//下一个
+				//处理上一次操作未完成
+				if(null !== timeout){
+					// clearTimeout(timeout);
+					// //上一次操作直接到位置
+					// timeout = null;
+					// $($swiperItems[currentItem]).css('left', 0);
+					// $($swiperItems[preCurrItemIndex]).css('left', '100%');
+
+					//另一种方式，等待操作结束
 					return;
+
 				}
 
 				var space = 100;
@@ -104,10 +115,23 @@
 				var currItemLeftInt = Number.parseInt(currentItemLeft);
 				var itemWith = Number.parseInt($currItem.width());
 				var currItemLeftPos = currItemLeftInt;
+				preCurrItemIndex = currentItem;
 
 				currentItem = currentItem + (isPrev ? -1 : 1);
+				if(currentItem >= $swiperItems.length){
+					currentItem = currentItem%$swiperItems.length;
+				}
+
+				if(currentItem < 0){
+					currentItem = $swiperItems.length - 1;
+				}
 
 				var $otherItem = $($swiperItems[currentItem]);
+
+				//初始化上一个、下一个item的位置
+				var initOtherItemLeftPos = isPrev ? -$otherItem.width() : $otherItem.width();
+				$otherItem.css('left', initOtherItemLeftPos);
+
 				var otherItemLeft = $otherItem.css('left');
 				var otherItemLeftInt = Number.parseInt(otherItemLeft);
 				var otherItemLeftPos = otherItemLeftInt;
@@ -135,26 +159,55 @@
 					$otherItem.css('left', otherItemLeftPos);
 
 				  if (otherItemLeftPos === 0) {
+						timeout = null;
 				    return;
 				  }
 
-					setTimeout(function(){
+					timeout = setTimeout(function(){
 						scrollLeftOrRight();
 					}, spaceTime);
 				}
 
-				setTimeout(function(){
-					scrollLeftOrRight();
-				}, spaceTime);
+				scrollLeftOrRight();
+
+				//自动轮询
+				if(!isClick){
+					autoLoopMethod()
+				}
 
 			}
+			// scrollItem结束
+
+			function autoLoopMethod(){
+				//自动轮询
+				autoLoopTimeout = setTimeout(function(){
+					scrollItem(false, false);
+				}, autoTimeMilli);
+			}
+
+			if(isAutoLoop){
+				autoLoopMethod();
+			}
+
+			$('.swiper-container').mouseover(function(event) {
+				if(null !== autoLoopTimeout){
+					clearTimeout(autoLoopTimeout);
+				}
+			});
+
+			$('.swiper-container').mouseout(function(event) {
+				if(isAutoLoop){
+					autoLoopMethod();
+				}
+			})
+
 
 		  $('.swiper-prev').click(function(event) {
-				scrollItem(true);
+				scrollItem(true, true);
 		  });
 
 		  $('.swiper-next').click(function(event) {
-				scrollItem(false);
+				scrollItem(false, true);
 		  });
 
 		});
