@@ -76,6 +76,28 @@
 			right: 20px;
 		}
 
+		.indicator-container{
+
+			width: 100%;
+			display: flex;
+			justify-content: center;
+
+			position: absolute;
+			bottom: 10px;
+		}
+
+		.indicator-item {
+		  height: 10px;
+			width: 10px;
+		  background: #ffcb1f;
+		  border-radius: 5px;
+
+		}
+
+		.indicator-item:not(:first-child){
+			margin-left: 15px;
+			background: rgba(0, 0, 0, 0.2);
+		}
 
 	</style>
 
@@ -85,12 +107,22 @@
 
 		  var $swiperContainer = $('.swiper-container');
 		  var $swiperItems = $('.swiper-item');
+			var $indicatorContainer = $('.indicator-container');
+			var $indicatorItemArr = new Array();
+			for(var i=0; i<$swiperItems.length; i++){
+				var $indicatorItem = $('<div></div>');
+				$indicatorItem.attr('class', 'indicator-item');
+				$indicatorContainer.append($indicatorItem);
+
+				$indicatorItemArr.push($indicatorItem);
+			}
 
 		  var currentItem = 0;
 			var autoLoopTimeout = null;
 			var timeout = null;
 			var autoTimeMilli = 3000;
 			var isAutoLoop = false;
+			// var isAutoLoop = true;
 			// var preCurrItemIndex;
 			function scrollItem(isPrev, isClick){
 
@@ -117,6 +149,8 @@
 				var currItemLeftPos = currItemLeftInt;
 				preCurrItemIndex = currentItem;
 
+				$indicatorItemArr[preCurrItemIndex].css('background', 'rgba(0, 0, 0, 0.2)');;
+
 				currentItem = currentItem + (isPrev ? -1 : 1);
 				if(currentItem >= $swiperItems.length){
 					currentItem = currentItem%$swiperItems.length;
@@ -125,6 +159,8 @@
 				if(currentItem < 0){
 					currentItem = $swiperItems.length - 1;
 				}
+
+				$indicatorItemArr[currentItem].css('background', '#ffcb1f');
 
 				var $otherItem = $($swiperItems[currentItem]);
 
@@ -201,6 +237,9 @@
 				}
 			})
 
+			$('.swiper-container').mousemove(function(event) {
+				console.log('pageX = '+event.pageX + ' pageY = '+event.pageY);
+			});
 
 		  $('.swiper-prev').click(function(event) {
 				scrollItem(true, true);
@@ -222,6 +261,11 @@
 		<div class="swiper-prev"><img src="imgs/swiper_pre.png"></div>
 		<div class="swiper-next"><img src="imgs/swiper_next.png"></div>
 
+		<div class="indicator-container">
+				<!-- <div class="indicator-item"></div>
+				<div class="indicator-item"></div>
+				<div class="indicator-item"></div> -->
+		</div>
 	</div>
 	<div class="ss"></div>
 </body>
