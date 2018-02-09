@@ -7,7 +7,7 @@ $(function(){
     var delete = sa - af;
 
 
-    afa
+      afa
 
     af
   }

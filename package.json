@@ -1,0 +1,23 @@
+{
+  "name": "simplewebproject",
+  "version": "1.0.0",
+  "description": "just try it",
+  "main": ".jshintrc.js",
+  "dependencies": {
+    "eslint": "^4.17.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/senlove/simpleWebPractice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/senlove/simpleWebPractice/issues"
+  },
+  "homepage": "https://github.com/senlove/simpleWebPractice#readme"
+}
