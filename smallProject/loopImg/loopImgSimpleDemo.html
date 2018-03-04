@@ -76,6 +76,28 @@
 			right: 20px;
 		}
 
+		.indicator-container{
+
+			width: 100%;
+			display: flex;
+			justify-content: center;
+
+			position: absolute;
+			bottom: 10px;
+		}
+
+		.indicator-item {
+		  height: 10px;
+			width: 10px;
+		  background: #ffcb1f;
+		  border-radius: 5px;
+
+		}
+
+		.indicator-item:not(:first-child){
+			margin-left: 15px;
+			background: rgba(0, 0, 0, 0.2);
+		}
 
 	</style>
 
@@ -85,15 +107,52 @@
 
 		  var $swiperContainer = $('.swiper-container');
 		  var $swiperItems = $('.swiper-item');
+			var $indicatorContainer = $('.indicator-container');
+			var $indicatorItemArr = new Array();
+			for(var i=0; i<$swiperItems.length; i++){
+				var $indicatorItem = $('<div></div>');
+				$indicatorItem.attr('class', 'indicator-item');
+				$indicatorContainer.append($indicatorItem);
+
+				$indicatorItemArr.push($indicatorItem);
+			}
+
+			function getPreItemIndex(currItemIndex, itemSize){
+				var preItemIndex = currItemIndex - 1;
+				if(preCurrItemIndex < 0){
+					preCurrItemIndex = itemSize - 1;
+				}
+				return preItemIndex;
+			}
+
+			function getNextItemIndex(currItemIndex, itemSize){
+				var nextItemIndex = currItemIndex + 1;
+				if(nextItemIndex >= itemSize){
+					nextItemIndex = 0;
+				}
+				return nextItemIndex;
+			}
 
 		  var currentItem = 0;
-			function scrollItem(isPrev){
-				if(isPrev && currentItem <=0){//上一个
-					return;
-				}
+			var autoLoopTimeout = null;
+			var timeout = null;
+			var autoTimeMilli = 3000;
+			var isAutoLoop = false;
+			// var isAutoLoop = true;
+			// var preCurrItemIndex;
+			function scrollItem(isPrev, isClick){
 
-				if(!isPrev && currentItem >= ($swiperItems.length - 1)){//下一个
+				//处理上一次操作未完成
+				if(null !== timeout){
+					// clearTimeout(timeout);
+					// //上一次操作直接到位置
+					// timeout = null;
+					// $($swiperItems[currentItem]).css('left', 0);
+					// $($swiperItems[preCurrItemIndex]).css('left', '100%');
+
+					//另一种方式，等待操作结束
 					return;
+
 				}
 
 				var space = 100;
@@ -104,10 +163,27 @@
 				var currItemLeftInt = Number.parseInt(currentItemLeft);
 				var itemWith = Number.parseInt($currItem.width());
 				var currItemLeftPos = currItemLeftInt;
+				preCurrItemIndex = currentItem;
+
+				$indicatorItemArr[preCurrItemIndex].css('background', 'rgba(0, 0, 0, 0.2)');;
 
 				currentItem = currentItem + (isPrev ? -1 : 1);
+				if(currentItem >= $swiperItems.length){
+					currentItem = currentItem%$swiperItems.length;
+				}
+
+				if(currentItem < 0){
+					currentItem = $swiperItems.length - 1;
+				}
+
+				$indicatorItemArr[currentItem].css('background', '#ffcb1f');
 
 				var $otherItem = $($swiperItems[currentItem]);
+
+				//初始化上一个、下一个item的位置
+				var initOtherItemLeftPos = isPrev ? -$otherItem.width() : $otherItem.width();
+				$otherItem.css('left', initOtherItemLeftPos);
+
 				var otherItemLeft = $otherItem.css('left');
 				var otherItemLeftInt = Number.parseInt(otherItemLeft);
 				var otherItemLeftPos = otherItemLeftInt;
@@ -135,29 +211,139 @@
 					$otherItem.css('left', otherItemLeftPos);
 
 				  if (otherItemLeftPos === 0) {
+						timeout = null;
 				    return;
 				  }
 
-					setTimeout(function(){
+					timeout = setTimeout(function(){
 						scrollLeftOrRight();
 					}, spaceTime);
 				}
 
-				setTimeout(function(){
-					scrollLeftOrRight();
-				}, spaceTime);
+				scrollLeftOrRight();
+
+				//自动轮询
+				if(!isClick){
+					autoLoopMethod()
+				}
 
 			}
+			// scrollItem结束
+
+			function autoLoopMethod(){
+				//自动轮询
+				autoLoopTimeout = setTimeout(function(){
+					scrollItem(false, false);
+				}, autoTimeMilli);
+			}
+
+			if(isAutoLoop){
+				autoLoopMethod();
+			}
+
+			$('.swiper-container').mouseover(function(event) {
+				if(null !== autoLoopTimeout){
+					clearTimeout(autoLoopTimeout);
+				}
+			});
+
+			$('.swiper-container').mouseout(function(event) {
+				if(isAutoLoop){
+					autoLoopMethod();
+				}
+			})
+
+			$('.swiper-container').mousedown(function(event) {
+
+				var lastOffsetX = event.offsetX;
+				var lastOffsetY = event.offsetY;
+
+				$(this).mousemove(function(event) {
+				  var offsetX = event.offsetX;
+				  var offsetY = event.offsetY;
+
+				  disX = offsetX - lastOffsetX;
+				  disY = offsetY - lastOffsetY;
+
+				  var currItemLeft = $($swiperItems[currentItem]).css('left');
+
+				  var otherItemIndex = (currItemLeft >= 0) ?
+				    getPreItemIndex(currentItem, $swiperItems.length) : getNextItemIndex(currentItem, $swiperItems.length);
+				  var otherItemLeft = $($swiperItems[otherItemIndex]).css('left');
+				  otherItemLeft += disX;
+				  $($swiperItems[preItemIndex]).css('left', otherItemLeft);
+
+
+				  currItemLeft += disX;
+				  $($swiperItems[currentItem]).css('left', currItemLeft);
+
+
+				  lastOffsetX = offsetX;
+				  lastOffsetY = offsetY;
+
+				});
+
+				$(this).mouseup(function(event) {
+					var currItemWidth = $($swiperItems[currentItem]).width();
+					var currItemLeft = $($swiperItems[currentItem]).css('left');
+					if(Math.abs(currItemLeft)<currItemWidth/2){
+
+
+
+					} else{
+
+					}
+
+
+					var otherItemIndex = (currItemLeft >= 0) ?
+						getPreItemIndex(currentItem, $swiperItems.length) : getNextItemIndex(currentItem, $swiperItems.length);
+				});
+			});
+
+			// $('.swiper-container').mousemove(function(event) {
+			// 	console.log('pageX = '+event.pageX + ' pageY = '+event.pageY);
+			// 	console.log('offsetX = '+event.offsetX + ' offsetY = '+event.offsetY);
+			// });
 
 		  $('.swiper-prev').click(function(event) {
-				scrollItem(true);
+				scrollItem(true, true);
 		  });
 
 		  $('.swiper-next').click(function(event) {
-				scrollItem(false);
+				scrollItem(false, true);
 		  });
 
+			function autoBackPos($showItem, $hideItem, space, timeOutMilli){
+				var showItemLeft = $showItem.css('left') + space;
+				var hideItemLeft = $hideItem.css('left') + space;
+				//通过正负判断滑动方向
+				if(space > 0){//往右
+					showItemLeft = showItemLeft >= 0 ? 0 : showItemLeft;
+					if(hideItemLeft > $hideItem.width()){
+						hideItemLeft = $hideItem.width();
+					}
+				} else{
+					showItemLeft = showItemLeft < 0 ? 0 : showItemLeft;
+					if(hideItemLeft < -$hideItem.width()){
+						hideItemLeft = -$hideItem.width();
+					}
+				}
+				$showItem.css('left', showItemLeft);
+				$hideItem.css('left', hideItemLeft);
+
+				if(showItemLeft === 0){
+					return;
+				}
+
+				setTimeout(function(){
+					autoBackPos($showItem, $hideItem, space, timeOutMilli);
+				}, timeOutMilli);
+			}
+
 		});
+
+
+
 	</script>
 </head>
 <body>
@@ -169,6 +355,11 @@
 		<div class="swiper-prev"><img src="imgs/swiper_pre.png"></div>
 		<div class="swiper-next"><img src="imgs/swiper_next.png"></div>
 
+		<div class="indicator-container">
+				<!-- <div class="indicator-item"></div>
+				<div class="indicator-item"></div>
+				<div class="indicator-item"></div> -->
+		</div>
 	</div>
 	<div class="ss"></div>
 </body>
