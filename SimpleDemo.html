@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>simple demo</title>
+    <script type="text/javascript">
+
+      //简单的json格式 以及json字符串转成对象或者对象数组的理解
+      window.onload = function(){
+
+        //这是一个json字符串的格式
+        //为了能够在js中显示，所以定义为一个字符串
+        var jsonStr = '{'+
+            '"name":"sensen",'+
+            '"address":"guangxiguigang",'+
+            '"school":"guangxixida",'+
+            '"age":27,'+
+            '"isMarried":false'+
+        '}';
+        console.log(jsonStr);
+        // 输出{"name":"sensen","address":"guangxiguigang","school":"guangxixida","age":27,"isMarried":false}
+
+        //这是创建对象的一种方式
+        //注意和上面的区别
+        var obj = {
+          name:"sensen",
+          address:"广西贵港",
+          school:"广西大学",
+          age:27,
+          isMarried:false,
+        }
+        console.log(obj.name);//输出sensen
+
+        //把一个json字符串转换成js的对象（也可以使用jquery方式，）
+        var parseObj = JSON.parse(jsonStr);
+        console.log(parseObj.name);//sensen
+        console.log(parseObj.age);//输出27
+        console.log(parseObj.schoolxxxx);//会输出underfine(竟然没有报错。。) 这里就清楚，如果某些数据出错，是不是属性输入出错了
+
+        //这是一个json字符串的格式,包含多个对象
+        //为了能够在js中显示，所以定义为一个字符串
+        var jsonArrsStr = '['+
+          '{'+
+              '"name":"sensen",'+
+              '"address":"广西贵港",'+
+              '"school":"广西大学",'+
+              '"age":27,'+
+              '"isMarried":false'+
+          '}'+
+          ','+
+          '{'+
+              '"name":"yangyang",'+
+              '"address":"北京",'+
+              '"school":"北京大学",'+
+              '"age":24,'+
+              '"isMarried":true'+
+          '}'+
+        ']';
+        console.log(jsonArrsStr);
+        //输出 [{"name":"sensen","address":"广西贵港","school":"广西大学","age":27,"isMarried":false},{"name":"yangyang","address":"北京","school":"北京大学","age":24,"isMarried":true}]
+        //可以格式化看看效果
+
+        //把json字符串转换成js对象数组代码
+        var objArrs = JSON.parse(jsonArrsStr);
+        console.log(objArrs.length);//输出是2
+
+        for(var i=0; i<objArrs.length; i++){
+          var objArrsItem = objArrs[i];
+          console.log(objArrsItem.name);//分别输出ensne yangyang
+        }
+
+
+
+      }
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
